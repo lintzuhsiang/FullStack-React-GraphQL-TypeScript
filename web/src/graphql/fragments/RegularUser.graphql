@@ -1,0 +1,18 @@
+fragment RegularUser on User {
+  id
+  username
+}
+
+fragment RegularError on FieldError {
+  field
+  message
+}
+
+fragment RegularUserResponse on UserResponse {
+  user {
+    ...RegularUser
+  }
+  errors {
+    ...RegularError
+  }
+}
