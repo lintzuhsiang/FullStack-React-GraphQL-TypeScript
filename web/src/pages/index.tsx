@@ -2,22 +2,17 @@ import {
   Box,
   Button,
   Flex,
-  Heading,
-  Icon,
-  IconButton,
-  Link, Stack,
+  Heading, Link, Stack,
   Text
 } from '@chakra-ui/react'
 import { withUrqlClient } from 'next-urql'
-import React, { useState } from 'react'
-import { Layout } from '../components/Layout'
-import { useDeletePostMutation, useMeQuery, usePostsQuery, useVoteMutation } from '../generated/graphql'
-import { createUrqlClient } from '../utils/createUrqlClient'
 import NextLink from 'next/link'
-import loadConfig from 'next/dist/next-server/server/config'
-import { ChevronDownIcon, ChevronUpIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import { UpdootSection } from '../components/UpdootSection'
+import React, { useState } from 'react'
 import { EditDeletePostButtons } from '../components/EditDeletePostButtons'
+import { Layout } from '../components/Layout'
+import { UpdootSection } from '../components/UpdootSection'
+import { usePostsQuery } from '../generated/graphql'
+import { createUrqlClient } from '../utils/createUrqlClient'
 
 const Index = () => {
   const [variables, setVariables] = useState({ cursor: null as null | string, limit: 33 })
@@ -85,7 +80,4 @@ const Index = () => {
 }
 
 export default withUrqlClient(createUrqlClient, { ssr: true })(Index)
-function useVote(): any[] {
-  throw new Error('Function not implemented.')
-}
 

@@ -222,8 +222,7 @@ let UserResolver = class UserResolver {
 };
 __decorate([
     type_graphql_1.FieldResolver(() => String),
-    __param(0, type_graphql_1.Root()),
-    __param(1, type_graphql_1.Ctx()),
+    __param(0, type_graphql_1.Root()), __param(1, type_graphql_1.Ctx()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Users_1.User, Object]),
     __metadata("design:returntype", void 0)

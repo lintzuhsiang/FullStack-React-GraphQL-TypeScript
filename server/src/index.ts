@@ -16,7 +16,7 @@ import path from "path";
 import { Updoot } from "./entities/Updoot";
 import { createUserLoader } from "./util/createUserLoader";
 import { createUpdootLoader } from "./util/createUpdootLoader";
-
+import "dotenv-safe/config"
 //rerun 
 const main = async () => {
   // app.get('/',(_,res)=>{
@@ -27,13 +27,14 @@ const main = async () => {
 
   const conn = await createConnection({
     type: "postgres",
-    database: "shinelin",
-    username: "postgres",
-    password: "postgres",
+    // database: "shinelin",
+    // username: "postgres",
+    // password: "postgres",
     logging: true,
-    synchronize: true,
+    // synchronize: true,
     migrations: [path.join(__dirname, "./migrations/*")],
     entities: [Post, User,Updoot],
+    url: process.env.DATABASE_URL,
   });
   await conn.runMigrations();
 
@@ -53,9 +54,9 @@ const main = async () => {
   const RedisStore = require("connect-redis")(session);
   // const RedisStore = connectRedis(session)
   // let redisClient = redis.createClient()
-  const redis = new Redis();
-  redis.get;
+  const redis = new Redis(process.env.REDIS_URL);
 
+  app.set('proxy',1)
   app.use(
     session({
       name: COOKIE_NAME,
@@ -68,8 +69,9 @@ const main = async () => {
         httpOnly: true,
         sameSite: "lax", //csrf
         secure: __prod__,
+        domain: __prod__ ? ".shinelin.info" : undefined
       },
-      secret: "jhugl",
+      secret: process.env.SESSION_SECRET,
       saveUninitialized: false,
       resave: false,
     })
@@ -77,7 +79,7 @@ const main = async () => {
 
   app.use(
     cors({
-      origin: "http://localhost:3000",
+      origin: process.env.CORS_ORIGIN,
       credentials: true,
     })
   );
@@ -91,7 +93,7 @@ const main = async () => {
   });
 
   apolloServer.applyMiddleware({ app, cors: false });
-  app.listen(4000, () => {
+  app.listen(process.env.PORT, () => {
     console.log("server started on local host: 4000");
   });
 };

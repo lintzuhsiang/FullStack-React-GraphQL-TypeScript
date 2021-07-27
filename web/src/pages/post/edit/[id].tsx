@@ -41,7 +41,7 @@ const EditPost = ({ }) => {
         <Layout variant="small">
 
             <Formik initialValues={{ title: data.post.title, text: data.post.text }}
-                onSubmit={async (values, { setErrors }) => {
+                onSubmit={async (values) => {
                     await updatePost({ id: intId, ...values })
                     // router.push("/")
                     router.back()

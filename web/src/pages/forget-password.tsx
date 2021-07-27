@@ -1,15 +1,11 @@
-import { Box, Button, Flex, Link } from '@chakra-ui/react';
-import { Formik, Form } from 'formik';
-import router from 'next/router';
-import React, { useState } from 'react'
+import { Box, Button } from '@chakra-ui/react';
+import { Form, Formik } from 'formik';
+import { withUrqlClient } from 'next-urql';
+import React, { useState } from 'react';
 import { InputField } from '../components/InputField';
 import { Wrapper } from '../components/Wrapper';
-import { toErrorMap } from '../utils/toErrorMap';
-import login from './login';
-import NextLink from 'next/link'
-import { withUrqlClient } from 'next-urql';
-import { createUrqlClient } from '../utils/createUrqlClient';
 import { useForgetPasswordMutation } from '../generated/graphql';
+import { createUrqlClient } from '../utils/createUrqlClient';
 
 
 const ForgetPassword: React.FC<{}> = ({ }) => {
