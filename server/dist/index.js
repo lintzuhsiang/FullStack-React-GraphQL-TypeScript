@@ -27,6 +27,9 @@ const Users_1 = require("./entities/Users");
 const Post_1 = require("./entities/Post");
 const typeorm_1 = require("typeorm");
 const path_1 = __importDefault(require("path"));
+const Updoot_1 = require("./entities/Updoot");
+const createUserLoader_1 = require("./util/createUserLoader");
+const createUpdootLoader_1 = require("./util/createUpdootLoader");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     console.log('dirname', __dirname);
     const conn = yield typeorm_1.createConnection({
@@ -37,7 +40,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         logging: true,
         synchronize: true,
         migrations: [path_1.default.join(__dirname, "./migrations/*")],
-        entities: [Post_1.Post, Users_1.User],
+        entities: [Post_1.Post, Users_1.User, Updoot_1.Updoot],
     });
     yield conn.runMigrations();
     const app = express_1.default();
@@ -69,7 +72,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             resolvers: [hello_1.HelloResolver, posts_1.PostResolver, users_1.UserResolver],
             validate: false,
         }),
-        context: ({ req, res }) => ({ req, res, redis }),
+        context: ({ req, res }) => ({ req, res, redis, userLoader: createUserLoader_1.createUserLoader(), updootLoader: createUpdootLoader_1.createUpdootLoader() }),
     });
     apolloServer.applyMiddleware({ app, cors: false });
     app.listen(4000, () => {

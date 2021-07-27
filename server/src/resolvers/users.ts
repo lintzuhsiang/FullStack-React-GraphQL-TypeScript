@@ -4,10 +4,12 @@ import {
   Arg,
   Ctx,
   Field,
+  FieldResolver,
   Mutation,
   ObjectType,
   Query,
   Resolver,
+  Root,
 } from "type-graphql";
 import argon2 from "argon2";
 import { UserNamePasswordInput } from "./UserNamePasswordInput";
@@ -35,8 +37,19 @@ class UserResponse {
   user?: User;
 }
 
-@Resolver()
+@Resolver(User)
 export class UserResolver {
+  @FieldResolver(()=>String)
+  email(@Root() user:User, @Ctx() {req}:MyContext){
+    // this is the current user and it's ok to show them thier own email  
+    if(req.session.userId === user.id){
+        return user.email
+      }
+    return ""
+  }
+
+
+
   @Mutation(() => Boolean)
   async forgetPassword(
     @Arg("email") email: string,
@@ -143,7 +156,6 @@ export class UserResolver {
         ],
       };
     }
-    // const valid = await argon2.verify(user.password, hashedPassword);
     const valid = await argon2.verify(user.password, password);
     if (!valid) {
       return {
@@ -157,7 +169,8 @@ export class UserResolver {
     }
 
     //set user is cookie and keep them login
-    req.session!.userId = user.id;
+    req.session.userId = user.id;
+    console.log('users.ts session',req.session)
     return {
       user: user,
     };

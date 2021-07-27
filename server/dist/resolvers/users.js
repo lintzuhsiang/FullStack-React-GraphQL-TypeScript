@@ -61,6 +61,12 @@ UserResponse = __decorate([
     type_graphql_1.ObjectType()
 ], UserResponse);
 let UserResolver = class UserResolver {
+    email(user, { req }) {
+        if (req.session.userId === user.id) {
+            return user.email;
+        }
+        return "";
+    }
     forgetPassword(email, { redis }) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield Users_1.User.findOne({ where: { email } });
@@ -150,6 +156,7 @@ let UserResolver = class UserResolver {
                 };
             }
             req.session.userId = user.id;
+            console.log('users.ts session', req.session);
             return {
                 user: user,
             };
@@ -214,6 +221,14 @@ let UserResolver = class UserResolver {
     }
 };
 __decorate([
+    type_graphql_1.FieldResolver(() => String),
+    __param(0, type_graphql_1.Root()),
+    __param(1, type_graphql_1.Ctx()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Users_1.User, Object]),
+    __metadata("design:returntype", void 0)
+], UserResolver.prototype, "email", null);
+__decorate([
     type_graphql_1.Mutation(() => Boolean),
     __param(0, type_graphql_1.Arg("email")),
     __param(1, type_graphql_1.Ctx()),
@@ -261,7 +276,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "changePassword", null);
 UserResolver = __decorate([
-    type_graphql_1.Resolver()
+    type_graphql_1.Resolver(Users_1.User)
 ], UserResolver);
 exports.UserResolver = UserResolver;
 //# sourceMappingURL=users.js.map

@@ -1,0 +1,9 @@
+ mutation UpdateMutation($id:Int!,$text:String!,$title:String!){
+  updatePost(id:$id,text:$text,title:$title){
+    id
+    createdAt
+    title
+    text
+    textSnippet
+  }
+}

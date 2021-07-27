@@ -13,6 +13,9 @@ import { User } from "./entities/Users";
 import { Post } from "./entities/Post";
 import { createConnection } from "typeorm";
 import path from "path";
+import { Updoot } from "./entities/Updoot";
+import { createUserLoader } from "./util/createUserLoader";
+import { createUpdootLoader } from "./util/createUpdootLoader";
 
 //rerun 
 const main = async () => {
@@ -30,7 +33,7 @@ const main = async () => {
     logging: true,
     synchronize: true,
     migrations: [path.join(__dirname, "./migrations/*")],
-    entities: [Post, User],
+    entities: [Post, User,Updoot],
   });
   await conn.runMigrations();
 
@@ -84,7 +87,7 @@ const main = async () => {
       resolvers: [HelloResolver, PostResolver, UserResolver],
       validate: false,
     }),
-    context: ({ req, res }) => ({ req, res, redis }),
+    context: ({ req, res }) => ({ req, res, redis,userLoader:createUserLoader(),updootLoader:createUpdootLoader() }),
   });
 
   apolloServer.applyMiddleware({ app, cors: false });
